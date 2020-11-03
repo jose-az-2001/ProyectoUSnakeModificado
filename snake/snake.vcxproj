@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="Alimento.cpp" />
     <ClCompile Include="Nodo.cpp" />
+    <ClCompile Include="Pila.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="Alimento.h" />
     <ClInclude Include="Nodo.h" />
+    <ClInclude Include="Pila.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Alimento.h"
+#include "Pila.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
@@ -11,12 +12,13 @@ using namespace std;
 int main() {
 	//variables
 	bool salir = false, menuprincipal = true;
-	int x = 0, y = 0, botonmenu = 0, direccion = 0, xserpiente = 0, yserpiente = 0 ;
+	int x = 0, y = 0, botonmenu = 0, direccion = 0, xserpiente = 0, yserpiente = 0, velocidad = 10;
 	Alimento Manzana = Alimento(1);
 	Alimento Fresa = Alimento(2);
 	Alimento Banano = Alimento(3);
 	Alimento Pera = Alimento(-1);
 	Alimento Piña = Alimento(-5);
+	Pila Serpiente = Pila();
 	//iniciacion Allegro
 	al_init();
 	al_install_mouse();
@@ -40,12 +42,13 @@ int main() {
 	al_register_event_source(eventoqueue, al_get_mouse_event_source());
 	al_register_event_source(eventoqueue, al_get_keyboard_event_source());
 	al_start_timer(segundoTimer);
-	int seg = 0;
+	int seg = 0, seguvelo = 0;
 	while (salir == false) {
 		al_wait_for_event(eventoqueue, &Evento);
 		if (Evento.type == ALLEGRO_EVENT_TIMER) {
 			if (Evento.timer.source == segundoTimer) {
 				seg++;
+				seguvelo++;
 			}
 		}
 		if (Evento.type == ALLEGRO_EVENT_MOUSE_AXES) {
@@ -65,15 +68,23 @@ int main() {
 			if (Evento.mouse.button & 1) {
 				if (x >= 85 && x <= 324 && y >= 190 && y <= 254) {
 					botonmenu = 1;
+					velocidad = 10;
 				}
 				if (x >= 85 && x <= 324 && y >= 304 && y <= 365) {
 					botonmenu = 2;
+					velocidad = 5;
 				}
 				if (x >= 85 && x <= 324 && y >= 415 && y <= 483) {
 					botonmenu = 3;
+					velocidad = 3;
 				}
 				if (x >= 85 && x <= 324 && y >= 529 && y <= 594) {
 					botonmenu = 4;
+					if (velocidad > 0) {
+						if (seguvelo == 300) {
+							velocidad--;
+						}
+					}
 				}
 			}
 		}
@@ -105,30 +116,30 @@ int main() {
 			case ALLEGRO_KEY_RIGHT:
 				cout << "tecla derecha" << endl;
 				direccion = 2;
-				break;
 				seg = 1;
+				break;
 			default:
 				break;
 			}
 		}
 
 		if (direccion == 3) {
-			if (seg % 10 == 0) {
+			if (seg % velocidad == 0) {
 				yserpiente = yserpiente + 40;
 			}
 		}
 		if (direccion == 1) {
-			if (seg % 10 == 0) {
+			if (seg % velocidad == 0) {
 				yserpiente = yserpiente - 40;
 			}
 		}
 		if (direccion == 4) {
-			if (seg % 10 == 0) {
+			if (seg % velocidad == 0) {
 				xserpiente = xserpiente - 40;
 			}
 		}
 		if (direccion == 2) {
-			if (seg % 10 == 0) {
+			if (seg % velocidad == 0) {
 				xserpiente = xserpiente + 40;
 			}
 		}
