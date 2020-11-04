@@ -15,12 +15,12 @@ int main() {
 	srand(time(NULL));
 	bool salir = false, menuprincipal = true, alimentoactivo = false;
 	int x = 0, y = 0, botonmenu = 0, direccion = 0, xserpiente = 0, yserpiente = 0, velocidad = 10;
-	int probalim = 0, posxalim = 0, posyalim = 0;
+	int probalim = 0, posxalim = 0, posyalim = 0, cascrece = 0;
 	Alimento Manzana = Alimento(1);
 	Alimento Fresa = Alimento(2);
 	Alimento Banano = Alimento(3);
 	Alimento Pera = Alimento(-1);
-	Alimento Piña = Alimento(-5);
+	Alimento Pinia = Alimento(-5);
 	Cola Serpiente = Cola();
 	//iniciacion Allegro
 	al_init();
@@ -66,6 +66,9 @@ int main() {
 				al_set_window_title(Tablero, "SNAKE");
 				al_clear_to_color(map);
 				Serpiente.Agregar(xserpiente, yserpiente);
+				Serpiente.Agregar(xserpiente, yserpiente);
+				Serpiente.Agregar(xserpiente, yserpiente);
+				Serpiente.Agregar(xserpiente, yserpiente);
 				menuprincipal = false;
 			}
 			if (Evento.mouse.button & 1) {
@@ -94,7 +97,7 @@ int main() {
 		if (menuprincipal == false) {
 			al_clear_to_color(map);
 			Serpiente.Recorrer();
-			al_draw_text(Gameplay, colorserpiente, 750, 960, NULL, ("Punteo: " + to_string(Serpiente.ObtenerTamanio()-1)).c_str());
+			al_draw_text(Gameplay, colorserpiente, 750, 960, NULL, ("Punteo: " + to_string(Serpiente.ObtenerTamanio()-4)).c_str());
 			if (probalim <= 40) {
 				al_draw_filled_circle(((posxalim * 40) + 20), ((posyalim * 40) + 20), 20, al_map_rgb(255, 0, 0));
 			}
@@ -110,27 +113,52 @@ int main() {
 			if (probalim >= 91 && probalim <= 100) {
 				al_draw_filled_circle(((posxalim * 40) + 20), ((posyalim * 40) + 20), 20, al_map_rgb(52, 180, 11));
 			}
+			if (posxalim * 40 == xserpiente && posyalim * 40 == yserpiente) {
+				if (probalim <= 40) {
+					cascrece=Manzana.ObtenerValor();
+				}
+				if (probalim >= 41 && probalim <= 65) {
+					cascrece = Fresa.ObtenerValor();
+				}
+				if (probalim >= 66 && probalim <= 85) {
+					cascrece = Banano.ObtenerValor();
+				}
+				if (probalim >= 86 && probalim <= 90) {
+					cascrece = Pinia.ObtenerValor();
+				}
+				if (probalim >= 91 && probalim <= 100) {
+					cascrece = Pera.ObtenerValor();
+				}
+				if (cascrece < 0) {
+					for (int a = 0; a > cascrece; a--) {
+						Serpiente.Eliminar();
+						alimentoactivo = false;
+					}
+				}
+				if (cascrece > 0) {
+					for (int a = 0; a < cascrece; a++) {
+						Serpiente.Agregar(xserpiente, yserpiente);
+						alimentoactivo = false;
+					}
+				}
+			}
 		}
 		if (Evento.type == ALLEGRO_EVENT_KEY_DOWN) {
 			switch (Evento.keyboard.keycode)
 			{
 			case ALLEGRO_KEY_DOWN:
-				cout << "tecla abajo" << endl;
 				direccion = 3;
 				seg = 1;
 				break;
 			case ALLEGRO_KEY_UP:
-				cout << "tecla arriba" << endl;
 				direccion = 1;
 				seg = 1;
 				break;
 			case ALLEGRO_KEY_LEFT:
-				cout<<"tecla izquierda" << endl;
 				direccion = 4;
 				seg = 1;
 				break;
 			case ALLEGRO_KEY_RIGHT:
-				cout << "tecla derecha" << endl;
 				direccion = 2;
 				seg = 1;
 				break;
@@ -172,7 +200,9 @@ int main() {
 			posyalim = rand() % 25;
 			alimentoactivo = true;
 		}
-
+		if (xserpiente < -1 || xserpiente >= 1000 || yserpiente < -1 || yserpiente >= 1000) {
+			salir  = true;
+		}
 		al_flip_display();
 	}
 	return 0;
