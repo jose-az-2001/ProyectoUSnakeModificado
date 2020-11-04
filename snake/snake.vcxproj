@@ -152,17 +152,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Alimento.cpp" />
+    <ClCompile Include="Cola.cpp" />
     <ClCompile Include="Nodo.cpp" />
-    <ClCompile Include="Pila.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="Alimento.h" />
+    <ClInclude Include="Cola.h" />
+    <ClInclude Include="Nodo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Alimento.h" />
-    <ClInclude Include="Nodo.h" />
-    <ClInclude Include="Pila.h" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

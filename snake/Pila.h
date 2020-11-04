@@ -13,4 +13,3 @@ private:
 	int max;
 	int tamanio;
 };
-

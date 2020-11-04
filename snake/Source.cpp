@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Alimento.h"
-#include "Pila.h"
+#include "Cola.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
@@ -18,7 +18,7 @@ int main() {
 	Alimento Banano = Alimento(3);
 	Alimento Pera = Alimento(-1);
 	Alimento Piña = Alimento(-5);
-	Pila Serpiente = Pila();
+	Cola Serpiente = Cola();
 	//iniciacion Allegro
 	al_init();
 	al_install_mouse();
@@ -27,14 +27,13 @@ int main() {
 	al_init_primitives_addon();
 	al_init_font_addon();
 	al_init_ttf_addon();
-
 	ALLEGRO_DISPLAY* Menu = al_create_display(400, 700);
 	al_set_window_title(Menu, "MENU SNAKE");
 	ALLEGRO_DISPLAY* Tablero;
 	ALLEGRO_BITMAP* Imamenu = al_load_bitmap("Imagenes/Snake Principal.png");
 	ALLEGRO_COLOR map = al_map_rgb(120, 51, 36);
 	ALLEGRO_COLOR colorserpiente = al_map_rgb(40, 255, 13);
-	ALLEGRO_FONT* Gameplay = al_load_font("Gameplay.ttf", 50, 0);
+	ALLEGRO_FONT* Gameplay = al_load_font("Gameplay.ttf", 30, 0);
 	ALLEGRO_TIMER* segundoTimer = al_create_timer(0.1);
 	ALLEGRO_EVENT_QUEUE* eventoqueue = al_create_event_queue();
 	ALLEGRO_EVENT Evento;
@@ -63,6 +62,7 @@ int main() {
 				Tablero = al_create_display(1000, 1000);
 				al_set_window_title(Tablero, "SNAKE");
 				al_clear_to_color(map);
+				Serpiente.Agregar(xserpiente, yserpiente);
 				menuprincipal = false;
 			}
 			if (Evento.mouse.button & 1) {
@@ -88,13 +88,11 @@ int main() {
 				}
 			}
 		}
-
 		if (menuprincipal == false) {
 			al_clear_to_color(map);
-			al_draw_filled_rectangle(xserpiente, yserpiente, xserpiente + 40, yserpiente + 40, colorserpiente);
-			al_draw_text(Gameplay, colorserpiente, 200, 475, NULL, ("Segundo: " + to_string(seg)).c_str());
+			Serpiente.Recorrer();
+			al_draw_text(Gameplay, colorserpiente, 750, 960, NULL, ("Punteo " + to_string(Serpiente.ObtenerTamanio()-1)).c_str());
 		}
-
 		if (Evento.type == ALLEGRO_EVENT_KEY_DOWN) {
 			switch (Evento.keyboard.keycode)
 			{
@@ -122,33 +120,35 @@ int main() {
 				break;
 			}
 		}
-
 		if (direccion == 3) {
 			if (seg % velocidad == 0) {
 				yserpiente = yserpiente + 40;
+				Serpiente.Eliminar();
+				Serpiente.Agregar(xserpiente, yserpiente);
 			}
 		}
 		if (direccion == 1) {
 			if (seg % velocidad == 0) {
 				yserpiente = yserpiente - 40;
+				Serpiente.Eliminar();
+				Serpiente.Agregar(xserpiente, yserpiente);
 			}
 		}
 		if (direccion == 4) {
 			if (seg % velocidad == 0) {
 				xserpiente = xserpiente - 40;
+				Serpiente.Eliminar();
+				Serpiente.Agregar(xserpiente, yserpiente);
 			}
 		}
 		if (direccion == 2) {
 			if (seg % velocidad == 0) {
 				xserpiente = xserpiente + 40;
+				Serpiente.Eliminar();
+				Serpiente.Agregar(xserpiente, yserpiente);
 			}
 		}
-
-
-
 		al_flip_display();
 	}
-
-
 	return 0;
 }
