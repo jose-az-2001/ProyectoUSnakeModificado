@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <time.h>
 #include "Alimento.h"
 #include "Cola.h"
 #include <allegro5/allegro.h>
@@ -11,8 +12,10 @@ using namespace std;
 
 int main() {
 	//variables
-	bool salir = false, menuprincipal = true;
+	srand(time(NULL));
+	bool salir = false, menuprincipal = true, alimentoactivo = false;
 	int x = 0, y = 0, botonmenu = 0, direccion = 0, xserpiente = 0, yserpiente = 0, velocidad = 10;
+	int probalim = 0, posxalim = 0, posyalim = 0;
 	Alimento Manzana = Alimento(1);
 	Alimento Fresa = Alimento(2);
 	Alimento Banano = Alimento(3);
@@ -91,7 +94,22 @@ int main() {
 		if (menuprincipal == false) {
 			al_clear_to_color(map);
 			Serpiente.Recorrer();
-			al_draw_text(Gameplay, colorserpiente, 750, 960, NULL, ("Punteo " + to_string(Serpiente.ObtenerTamanio()-1)).c_str());
+			al_draw_text(Gameplay, colorserpiente, 750, 960, NULL, ("Punteo: " + to_string(Serpiente.ObtenerTamanio()-1)).c_str());
+			if (probalim <= 40) {
+				al_draw_filled_circle(((posxalim * 40) + 20), ((posyalim * 40) + 20), 20, al_map_rgb(255, 0, 0));
+			}
+			if (probalim >= 41 && probalim <= 65) {
+				al_draw_filled_ellipse(((posxalim * 40) + 20), ((posyalim * 40) + 20), 10, 20, al_map_rgb(249, 82, 130));
+			}
+			if (probalim >= 66 && probalim <= 85) {
+				al_draw_filled_ellipse(((posxalim * 40) + 20), ((posyalim * 40) + 20), 20, 5, al_map_rgb(255, 255, 0));
+			}
+			if (probalim >= 86 && probalim <= 90) {
+				al_draw_filled_ellipse(((posxalim * 40) + 20), ((posyalim * 40) + 20), 15, 20, al_map_rgb(255, 255, 0));
+			}
+			if (probalim >= 91 && probalim <= 100) {
+				al_draw_filled_circle(((posxalim * 40) + 20), ((posyalim * 40) + 20), 20, al_map_rgb(52, 180, 11));
+			}
 		}
 		if (Evento.type == ALLEGRO_EVENT_KEY_DOWN) {
 			switch (Evento.keyboard.keycode)
@@ -148,6 +166,13 @@ int main() {
 				Serpiente.Agregar(xserpiente, yserpiente);
 			}
 		}
+		if (alimentoactivo == false) {
+			probalim = 1 + rand() % (101 - 1);
+			posxalim = rand() % 25;
+			posyalim = rand() % 25;
+			alimentoactivo = true;
+		}
+
 		al_flip_display();
 	}
 	return 0;
