@@ -13,7 +13,7 @@ using namespace std;
 int main() {
 	//variables
 	srand(time(NULL));
-	bool salir = false, menuprincipal = true, alimentoactivo = false;
+	bool salir = false, menuprincipal = true, alimentoactivo = false, difactivada = false;
 	int x = 0, y = 0, botonmenu = 0, direccion = 0, xserpiente = 0, yserpiente = 0, velocidad = 10;
 	int probalim = 0, posxalim = 0, posyalim = 0, cascrece = 0;
 	int lad1x = 0, lad1y = 0, lad2x = 0, lad2y = 0, col1x = 0, col1y = 0, col2x = 0, col2y = 0, paredx = 0, paredy = 0;
@@ -70,6 +70,9 @@ int main() {
 				Serpiente.Agregar(xserpiente, yserpiente);
 				Serpiente.Agregar(xserpiente, yserpiente);
 				Serpiente.Agregar(xserpiente, yserpiente);
+				if (Serpiente.ObtenerTamanio() < 4) {
+					salir = true;
+				}
 				menuprincipal = false;
 			}
 			if (Evento.mouse.button & 1) {
@@ -80,10 +83,12 @@ int main() {
 				if (x >= 85 && x <= 324 && y >= 304 && y <= 365) {
 					botonmenu = 2;
 					velocidad = 5;
+					difactivada = true;
 				}
 				if (x >= 85 && x <= 324 && y >= 415 && y <= 483) {
 					botonmenu = 3;
 					velocidad = 3;
+					difactivada = true;
 				}
 				if (x >= 85 && x <= 324 && y >= 529 && y <= 594) {
 					botonmenu = 4;
@@ -92,6 +97,7 @@ int main() {
 							velocidad--;
 						}
 					}
+					difactivada = true;
 				}
 			}
 		}
@@ -201,25 +207,59 @@ int main() {
 			posyalim = rand() % 25;
 			alimentoactivo = true;
 		}
+		//terminar juego
 		if (xserpiente < -1 || xserpiente >= 1000 || yserpiente < -1 || yserpiente >= 1000) {
 			salir  = true;
 		}
-		if (botonmenu == 2) {
+		//Obstaculos por dificultad
+		if (difactivada == true) {
 			lad1x = (rand() % 25) * 40;
 			lad1y = (rand() % 25) * 40;
 			lad2x = (rand() % 25) * 40;
 			lad2y = (rand() % 25) * 40;
 			col1x = (rand() % 24) * 40;
 			col1y = (rand() % 24) * 40;
+			col2x = (rand() % 24) * 40;
+			col2y = (rand() % 24) * 40;
+			paredx = (rand() % 25) * 40;
+			paredy = (rand() % 19) * 40;
+			difactivada = false;
+		}
+		if (botonmenu == 2) {
 			al_draw_filled_rectangle(lad1x, lad1y, lad1x + 40, lad1y + 40, ladrillo);
 			al_draw_filled_rectangle(lad2x, lad2y, lad2x + 40, lad2y + 40, ladrillo);
-			al_draw_filled_rectangle(col1x, col1y, col1x + 40, col1y + 40, ladrillo);
+			al_draw_filled_rectangle(col1x, col1y, col1x + 80, col1y + 80, ladrillo);
+			if (xserpiente == lad1x && lad1y == yserpiente) {
+				salir = true;
+			}
+			if (xserpiente == lad2x && lad2y == yserpiente) {
+				salir = true;
+			}
+			if (xserpiente >= col1x && yserpiente >= col1y && xserpiente <= col1x+45 && yserpiente <= col1y + 45) {
+				salir = true;
+			}
 		}
-		if (botonmenu == 3) {
-
-		}
-		if (botonmenu == 4) {
-
+		if (botonmenu == 3 || botonmenu == 4) {
+			al_draw_filled_rectangle(lad1x, lad1y, lad1x + 40, lad1y + 40, ladrillo);
+			al_draw_filled_rectangle(lad2x, lad2y, lad2x + 40, lad2y + 40, ladrillo);
+			al_draw_filled_rectangle(col1x, col1y, col1x + 80, col1y + 80, ladrillo);
+			al_draw_filled_rectangle(col2x, col2y, col2x + 80, col2y + 80, ladrillo);
+			al_draw_filled_rectangle(paredx, paredy, paredx + 40, paredy + 240, ladrillo);
+			if (xserpiente == lad1x && lad1y == yserpiente) {
+				salir = true;
+			}
+			if (xserpiente == lad2x && lad2y == yserpiente) {
+				salir = true;
+			}
+			if (xserpiente >= col1x && yserpiente >= col1y && xserpiente <= col1x + 45 && yserpiente <= col1y + 45) {
+				salir = true;
+			}
+			if (xserpiente >= col2x && yserpiente >= col2y && xserpiente <= col2x + 45 && yserpiente <= col2y + 45) {
+				salir = true;
+			}
+			if (xserpiente >= paredx && yserpiente >= paredy && xserpiente <= paredx + 20 && yserpiente <= paredy + 245) {
+				salir = true;
+			}
 		}
 		al_flip_display();
 	}
