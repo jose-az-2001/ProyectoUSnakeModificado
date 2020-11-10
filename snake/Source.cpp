@@ -48,6 +48,7 @@ int main() {
 	al_start_timer(segundoTimer);
 	int seg = 0, seguvelo = 0;
 	while (salir == false) {
+		//Eventos
 		al_wait_for_event(eventoqueue, &Evento);
 		if (Evento.type == ALLEGRO_EVENT_TIMER) {
 			if (Evento.timer.source == segundoTimer) {
@@ -59,6 +60,30 @@ int main() {
 			x = Evento.mouse.x;
 			y = Evento.mouse.y;
 		}
+		if (Evento.type == ALLEGRO_EVENT_KEY_DOWN) {
+			switch (Evento.keyboard.keycode)
+			{
+			case ALLEGRO_KEY_DOWN:
+				direccion = 3;
+				seg = 1;
+				break;
+			case ALLEGRO_KEY_UP:
+				direccion = 1;
+				seg = 1;
+				break;
+			case ALLEGRO_KEY_LEFT:
+				direccion = 4;
+				seg = 1;
+				break;
+			case ALLEGRO_KEY_RIGHT:
+				direccion = 2;
+				seg = 1;
+				break;
+			default:
+				break;
+			}
+		}
+		//Menu principal
 		if (menuprincipal == true) {
 			if (botonmenu == 0) {
 				al_draw_bitmap(Imamenu, 0, 0, 0);
@@ -103,6 +128,7 @@ int main() {
 				}
 			}
 		}
+		//durante el juego
 		if (juego == true) {
 			al_clear_to_color(map);
 			Serpiente.Recorrer();
@@ -241,30 +267,8 @@ int main() {
 				}
 			}
 		}
-		if (Evento.type == ALLEGRO_EVENT_KEY_DOWN) {
-			switch (Evento.keyboard.keycode)
-			{
-			case ALLEGRO_KEY_DOWN:
-				direccion = 3;
-				seg = 1;
-				break;
-			case ALLEGRO_KEY_UP:
-				direccion = 1;
-				seg = 1;
-				break;
-			case ALLEGRO_KEY_LEFT:
-				direccion = 4;
-				seg = 1;
-				break;
-			case ALLEGRO_KEY_RIGHT:
-				direccion = 2;
-				seg = 1;
-				break;
-			default:
-				break;
-			}
-		}
 		
+		//Pantalla de puntajes
 		
 		if (puntajes == true) {
 			al_draw_bitmap(TabPunt, 0, 0, 0);
