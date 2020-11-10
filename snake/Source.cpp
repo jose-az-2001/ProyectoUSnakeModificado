@@ -16,6 +16,7 @@ int main() {
 	bool salir = false, menuprincipal = true, alimentoactivo = false;
 	int x = 0, y = 0, botonmenu = 0, direccion = 0, xserpiente = 0, yserpiente = 0, velocidad = 10;
 	int probalim = 0, posxalim = 0, posyalim = 0, cascrece = 0;
+	int lad1x = 0, lad1y = 0, lad2x = 0, lad2y = 0, col1x = 0, col1y = 0, col2x = 0, col2y = 0, paredx = 0, paredy = 0;
 	Alimento Manzana = Alimento(1);
 	Alimento Fresa = Alimento(2);
 	Alimento Banano = Alimento(3);
@@ -34,8 +35,8 @@ int main() {
 	al_set_window_title(Menu, "MENU SNAKE");
 	ALLEGRO_DISPLAY* Tablero;
 	ALLEGRO_BITMAP* Imamenu = al_load_bitmap("Imagenes/Snake Principal.png");
-	ALLEGRO_COLOR map = al_map_rgb(120, 51, 36);
-	ALLEGRO_COLOR colorserpiente = al_map_rgb(40, 255, 13);
+	ALLEGRO_COLOR map = al_map_rgb(0, 0, 0);
+	ALLEGRO_COLOR ladrillo = al_map_rgb(153, 10, 10);
 	ALLEGRO_FONT* Gameplay = al_load_font("Gameplay.ttf", 30, 0);
 	ALLEGRO_TIMER* segundoTimer = al_create_timer(0.1);
 	ALLEGRO_EVENT_QUEUE* eventoqueue = al_create_event_queue();
@@ -97,7 +98,7 @@ int main() {
 		if (menuprincipal == false) {
 			al_clear_to_color(map);
 			Serpiente.Recorrer();
-			al_draw_text(Gameplay, colorserpiente, 750, 960, NULL, ("Punteo: " + to_string(Serpiente.ObtenerTamanio()-4)).c_str());
+			al_draw_text(Gameplay, ladrillo, 750, 960, NULL, ("Punteo: " + to_string(Serpiente.ObtenerTamanio()-4)).c_str());
 			if (probalim <= 40) {
 				al_draw_filled_circle(((posxalim * 40) + 20), ((posyalim * 40) + 20), 20, al_map_rgb(255, 0, 0));
 			}
@@ -202,6 +203,23 @@ int main() {
 		}
 		if (xserpiente < -1 || xserpiente >= 1000 || yserpiente < -1 || yserpiente >= 1000) {
 			salir  = true;
+		}
+		if (botonmenu == 2) {
+			lad1x = (rand() % 25) * 40;
+			lad1y = (rand() % 25) * 40;
+			lad2x = (rand() % 25) * 40;
+			lad2y = (rand() % 25) * 40;
+			col1x = (rand() % 24) * 40;
+			col1y = (rand() % 24) * 40;
+			al_draw_filled_rectangle(lad1x, lad1y, lad1x + 40, lad1y + 40, ladrillo);
+			al_draw_filled_rectangle(lad2x, lad2y, lad2x + 40, lad2y + 40, ladrillo);
+			al_draw_filled_rectangle(col1x, col1y, col1x + 40, col1y + 40, ladrillo);
+		}
+		if (botonmenu == 3) {
+
+		}
+		if (botonmenu == 4) {
+
 		}
 		al_flip_display();
 	}
