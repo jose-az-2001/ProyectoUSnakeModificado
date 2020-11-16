@@ -42,7 +42,7 @@ int main() {
 	ALLEGRO_COLOR ladrillo = al_map_rgb(153, 10, 10);
 	ALLEGRO_COLOR White = al_map_rgb(255, 255, 255);
 	ALLEGRO_FONT* Gameplay = al_load_font("Gameplay.ttf", 30, 0);
-	ALLEGRO_TIMER* segundoTimer = al_create_timer(0.1);
+	ALLEGRO_TIMER* segundoTimer = al_create_timer(0.05);
 	ALLEGRO_EVENT_QUEUE* eventoqueue = al_create_event_queue();
 	ALLEGRO_EVENT Evento;
 	al_register_event_source(eventoqueue, al_get_timer_event_source(segundoTimer));
