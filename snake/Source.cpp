@@ -67,6 +67,9 @@ int main() {
 			switch (Evento.keyboard.keycode)
 			{
 			case ALLEGRO_KEY_DOWN:
+				if (direccion == 1) {
+
+				}
 				direccion = 3;
 				seg = 1;
 				break;
@@ -102,6 +105,7 @@ int main() {
 				if (Serpiente.ObtenerTamanio() < 4) {
 					juego = false;
 					puntajes = true;
+					agregarpunt = true;
 				}
 				menuprincipal = false;
 				juego = true;
@@ -132,9 +136,9 @@ int main() {
 				}
 			}
 		}
-		//durante el juego
+		//durante la ejecucion del juego
 		if (juego == true) {
-			
+			//sfrutas
 			al_clear_to_color(map);
 			Serpiente.Recorrer();
 			al_draw_text(Gameplay, ladrillo, 750, 960, NULL, ("Punteo: " + to_string(Serpiente.ObtenerTamanio()-4)).c_str());
@@ -236,6 +240,7 @@ int main() {
 				paredy = (rand() % 19) * 40;
 				difactivada = false;
 			}
+			//obstaculos dificultad media
 			if (botonmenu == 2) {
 				al_draw_filled_rectangle(lad1x, lad1y, lad1x + 40, lad1y + 40, ladrillo);
 				al_draw_filled_rectangle(lad2x, lad2y, lad2x + 40, lad2y + 40, ladrillo);
@@ -256,6 +261,7 @@ int main() {
 					agregarpunt = true;
 				}
 			}
+			//obstaculos dificultad dificil y dinamico
 			if (botonmenu == 3 || botonmenu == 4) {
 				al_draw_filled_rectangle(lad1x, lad1y, lad1x + 40, lad1y + 40, ladrillo);
 				al_draw_filled_rectangle(lad2x, lad2y, lad2x + 40, lad2y + 40, ladrillo);
@@ -288,6 +294,7 @@ int main() {
 					agregarpunt = true;
 				}
 			}
+			//agregar punteo a la lista
 			if (agregarpunt == true) {
 				if (Puntos.ObtenerTamanio() == 0) {
 					Puntos.InsertarInicio(Serpiente.ObtenerTamanio() - 4);
@@ -309,9 +316,7 @@ int main() {
 				agregarpunt = false;
 			}
 		}
-		
 		//Pantalla de puntajes
-		
 		if (puntajes == true) {
 			al_draw_bitmap(TabPunt, 0, 0, 0);
 			int cantidad;
@@ -327,8 +332,6 @@ int main() {
 				al_draw_text(Gameplay, White, 420,altletras,NULL, (pun.c_str()));
 				altletras = altletras + 100;
 			}
-
-
 			if (Evento.type == ALLEGRO_EVENT_KEY_DOWN) {
 				switch (Evento.keyboard.keycode)
 				{
