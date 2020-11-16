@@ -153,13 +153,17 @@
   <ItemGroup>
     <ClCompile Include="Alimento.cpp" />
     <ClCompile Include="Cola.cpp" />
+    <ClCompile Include="Lista.cpp" />
     <ClCompile Include="Nodo.cpp" />
+    <ClCompile Include="NodoPunteo.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Alimento.h" />
     <ClInclude Include="Cola.h" />
+    <ClInclude Include="Lista.h" />
     <ClInclude Include="Nodo.h" />
+    <ClInclude Include="NodoPunteo.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

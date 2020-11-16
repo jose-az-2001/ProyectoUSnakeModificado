@@ -2,6 +2,7 @@
 #include <string>
 #include <time.h>
 #include "Alimento.h"
+#include "Lista.h"
 #include "Cola.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -13,7 +14,7 @@ using namespace std;
 int main() {
 	//variables
 	srand(time(NULL));
-	bool salir = false, menuprincipal = true, alimentoactivo = false, difactivada = false, juego = false, puntajes = false;
+	bool salir = false, menuprincipal = true, alimentoactivo = false, difactivada = false, juego = false, puntajes = false, agregarpunt = false, bandera = false;
 	int x = 0, y = 0, botonmenu = 0, direccion = 0, xserpiente = 0, yserpiente = 0, velocidad = 10;
 	int probalim = 0, posxalim = 0, posyalim = 0, cascrece = 0;
 	int lad1x = 0, lad1y = 0, lad2x = 0, lad2y = 0, col1x = 0, col1y = 0, col2x = 0, col2y = 0, paredx = 0, paredy = 0;
@@ -23,6 +24,7 @@ int main() {
 	Alimento Pera = Alimento(-1);
 	Alimento Pinia = Alimento(-5);
 	Cola Serpiente = Cola();
+	Lista Puntos = Lista();
 	//iniciacion Allegro
 	al_init();
 	al_install_mouse();
@@ -38,6 +40,7 @@ int main() {
 	ALLEGRO_BITMAP* TabPunt = al_load_bitmap("Imagenes/Puntajes.png");
 	ALLEGRO_COLOR map = al_map_rgb(0, 0, 0);
 	ALLEGRO_COLOR ladrillo = al_map_rgb(153, 10, 10);
+	ALLEGRO_COLOR White = al_map_rgb(255, 255, 255);
 	ALLEGRO_FONT* Gameplay = al_load_font("Gameplay.ttf", 30, 0);
 	ALLEGRO_TIMER* segundoTimer = al_create_timer(0.1);
 	ALLEGRO_EVENT_QUEUE* eventoqueue = al_create_event_queue();
@@ -97,7 +100,8 @@ int main() {
 				Serpiente.Agregar(xserpiente, yserpiente);
 				Serpiente.Agregar(xserpiente, yserpiente);
 				if (Serpiente.ObtenerTamanio() < 4) {
-					salir = true;
+					juego = false;
+					puntajes = true;
 				}
 				menuprincipal = false;
 				juego = true;
@@ -130,6 +134,7 @@ int main() {
 		}
 		//durante el juego
 		if (juego == true) {
+			
 			al_clear_to_color(map);
 			Serpiente.Recorrer();
 			al_draw_text(Gameplay, ladrillo, 750, 960, NULL, ("Punteo: " + to_string(Serpiente.ObtenerTamanio()-4)).c_str());
@@ -215,6 +220,7 @@ int main() {
 			if (xserpiente < -1 || xserpiente >= 1000 || yserpiente < -1 || yserpiente >= 1000) {
 				juego = false;
 				puntajes = true;
+				agregarpunt = true;
 			}
 			//Obstaculos por dificultad
 			if (difactivada == true) {
@@ -235,13 +241,19 @@ int main() {
 				al_draw_filled_rectangle(lad2x, lad2y, lad2x + 40, lad2y + 40, ladrillo);
 				al_draw_filled_rectangle(col1x, col1y, col1x + 80, col1y + 80, ladrillo);
 				if (xserpiente == lad1x && lad1y == yserpiente) {
-					salir = true;
+					juego = false;
+					puntajes = true;
+					agregarpunt = true;
 				}
 				if (xserpiente == lad2x && lad2y == yserpiente) {
-					salir = true;
+					juego = false;
+					puntajes = true;
+					agregarpunt = true;
 				}
 				if (xserpiente >= col1x && yserpiente >= col1y && xserpiente <= col1x + 45 && yserpiente <= col1y + 45) {
-					salir = true;
+					juego = false;
+					puntajes = true;
+					agregarpunt = true;
 				}
 			}
 			if (botonmenu == 3 || botonmenu == 4) {
@@ -251,20 +263,50 @@ int main() {
 				al_draw_filled_rectangle(col2x, col2y, col2x + 80, col2y + 80, ladrillo);
 				al_draw_filled_rectangle(paredx, paredy, paredx + 40, paredy + 240, ladrillo);
 				if (xserpiente == lad1x && lad1y == yserpiente) {
-					salir = true;
+					juego = false;
+					puntajes = true;
+					agregarpunt = true;
 				}
 				if (xserpiente == lad2x && lad2y == yserpiente) {
-					salir = true;
+					juego = false;
+					puntajes = true;
+					agregarpunt = true;
 				}
 				if (xserpiente >= col1x && yserpiente >= col1y && xserpiente <= col1x + 45 && yserpiente <= col1y + 45) {
-					salir = true;
+					juego = false;
+					puntajes = true;
+					agregarpunt = true;
 				}
 				if (xserpiente >= col2x && yserpiente >= col2y && xserpiente <= col2x + 45 && yserpiente <= col2y + 45) {
-					salir = true;
+					juego = false;
+					puntajes = true;
+					agregarpunt = true;
 				}
 				if (xserpiente >= paredx && yserpiente >= paredy && xserpiente <= paredx + 20 && yserpiente <= paredy + 245) {
-					salir = true;
+					juego = false;
+					puntajes = true;
+					agregarpunt = true;
 				}
+			}
+			if (agregarpunt == true) {
+				if (Puntos.ObtenerTamanio() == 0) {
+					Puntos.InsertarInicio(Serpiente.ObtenerTamanio() - 4);
+				}
+				else {
+					for (int i = 0; i < Puntos.ObtenerTamanio(); i++) {
+						if (Puntos.BuscarPosicion(i)->ObtenerNumero() < (Serpiente.ObtenerTamanio() - 4)) {
+							Puntos.InsertarAntes((Serpiente.ObtenerTamanio() - 4), Puntos.BuscarPosicion(i)->ObtenerNumero());
+							bandera = true;
+							break;
+						}
+
+					}
+					if (bandera == false) {
+						Puntos.InsertarFinal(Serpiente.ObtenerTamanio() - 4);
+					}
+					bandera = false;
+				}
+				agregarpunt = false;
 			}
 		}
 		
@@ -272,11 +314,47 @@ int main() {
 		
 		if (puntajes == true) {
 			al_draw_bitmap(TabPunt, 0, 0, 0);
-			if (Evento.mouse.button & 1) {
-				if (x >= 827 && x <= 971 && y >= 914 && y <= 976) {
+			int cantidad;
+			if (Puntos.ObtenerTamanio() < 5) {
+				cantidad = Puntos.ObtenerTamanio();
+			}
+			else {
+				cantidad = 5;
+			}
+			int altletras = 364;
+			for (int j = 0; j < cantidad; j++) {
+				string pun = "Puntos: "+to_string(Puntos.BuscarPosicion(j)->ObtenerNumero());
+				al_draw_text(Gameplay, White, 420,altletras,NULL, (pun.c_str()));
+				altletras = altletras + 100;
+			}
+
+
+			if (Evento.type == ALLEGRO_EVENT_KEY_DOWN) {
+				switch (Evento.keyboard.keycode)
+				{
+				case ALLEGRO_KEY_ENTER:
+					puntajes = false;
+					juego = true;
+					for (int i = Serpiente.ObtenerTamanio(); i > 0; i--) {
+						Serpiente.Eliminar();
+					}
+					xserpiente = 0;
+					yserpiente = 0;
+					Serpiente.Agregar(xserpiente, yserpiente);
+					Serpiente.Agregar(xserpiente, yserpiente);
+					Serpiente.Agregar(xserpiente, yserpiente);
+					Serpiente.Agregar(xserpiente, yserpiente);
+					alimentoactivo = false;
+					direccion = 0;
+					break;
+				case ALLEGRO_KEY_ESCAPE:
 					salir = true;
+					break;
+				default:
+					break;
 				}
 			}
+
 		}
 		al_flip_display();
 	}
